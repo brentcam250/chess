@@ -3,9 +3,9 @@ require_relative 'board.rb'
 class Piece 
   attr_accessor :position
   attr_reader :piece, :colour
-  def initialize(player)
+  def initialize(player, position)
     @piece = ''
-    @position = []
+    @position = position
     @colour = player.colour
     @number_of_moves = 0
     @eligible_moves = []
