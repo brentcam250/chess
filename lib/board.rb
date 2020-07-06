@@ -24,24 +24,39 @@ class Board
     pieces = []
     x = 0
     8.times do 
-      new_piece = { Pawn.new(player_1, position = [x, 6] )}
-      white_piece = { Pawn.new(player_2, position = [x, 1])}
-      x += 1
+      #pawns
+      new_piece = { "piece" => Pawn.new(player_1, position = [x, 6] )}
+      white_piece = { "piece" => Pawn.new(player_2, position = [x, 1])}
+      @board[x][6] = new_piece
+      @board[x][1] = white_piece
 
       pieces << new_piece
       pieces << white_piece
-
+      x += 1
+      
     end
+
+    puts "pieces #{pieces}"
+    return pieces
     #method to initalize all the pieces on the board with their positions.
     #perhaps an array of hashes to store the piece object along with their place on the board
   end
 
   def on_game_board?(position)
     #simple helper function to determine if the space passed in, is on the legal board
-    if(BOARD_X.include?(position[0])) && (BOARD_Y.include?(position[1])))
+    if(BOARD_X.include?(position[0])) && (BOARD_Y.include?(position[1]))
       return true
     else
       return false
     end
   end
+
+  def cell_contents(x, y)
+    @board[x][y] unless @board.nil?
+  end
 end
+
+
+test = Board.new
+puts "cell"
+puts test.cell_contents(0,6)

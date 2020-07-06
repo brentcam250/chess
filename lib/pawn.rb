@@ -42,10 +42,10 @@ class Pawn < Piece
   end
 end
 
-# player = Player.new('Brent', "black")
+player = Player.new('Brent', "black")
 
-# test = Pawn.new(player)
+test = Pawn.new(player)
 
-# # puts test
+# puts test
 
-# puts test.pawn_moves
+puts test.pawn_moves
