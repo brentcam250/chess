@@ -4,6 +4,7 @@ require './lib/piece.rb'
 require './lib/king.rb'
 require './lib/player.rb'
 require './lib/rook.rb'
+require './lib/chess.rb'
 
 
 describe Board do
@@ -14,15 +15,20 @@ describe Board do
     end
     it "initializes cells with their appropriate background colour " do
       test_board = Board.new
-      expect(@board[0][0]).to eql("\e[47m   \e[0m")
+      expect(test_board.board[0][0].background_colour).to eql("\e[44m   \e[0m")
     end
-    it "fills a 2-d array with pieces where they belong" do
-      board = Board.new
-      expect(board.cell_contents(0,6)).to eql("pawn")
-      expect(board.cell_contents(0,7)).to eql("rook")
-      # pieces = board.pieces
-      # expect(pieces)
-    end
+
+    #this functionality was raised up to Chess class
+
+    # it "fills a 2-d array with pieces where they belong" do
+    #   board = Board.new
+    #   player = Player.new("test", "black")
+    #   board.set_pieces("black", player)
+    #   expect(board.board[0][6].piece.piece).to eql("pawn")
+    #   expect(board.board[0][7].piece.piece).to eql("rook")
+    #   # pieces = board.pieces
+    #   # expect(pieces)
+    # end
        
 
   end
@@ -44,5 +50,25 @@ describe Pawn do
       expect(pawn.eligible_moves).length.to eql(2)
     end
 
+  end
+end
+
+describe Chess do 
+  describe "#initialize" do 
+    it "sets two Players" do
+      game = Chess.new()
+      expect(game.player_1.nil?).to eql(false)
+      expect(game.player_2.nil?).to eql(false)
+
+    end
+
+    it "fills a 2-d array with pieces where they belong" do
+      game = Chess.new
+
+      expect(game.board.board[0][6].piece.piece).to eql("pawn")
+      expect(game.board.board[0][7].piece.piece).to eql("rook")
+      # pieces = board.pieces
+      # expect(pieces)
+    end
   end
 end

@@ -2,6 +2,8 @@ require_relative 'cell'
 require_relative 'piece'
 require_relative 'pawn'
 require_relative 'player'
+require_relative 'rook'
+
 
 
 BOARD_X = 0..7
@@ -36,30 +38,6 @@ class Board
     end
   end
 
-  def set_pieces(colour, player)
-    #method to setup the pieces in their initial positions
-    if(colour == "black")
-      y_pawn = 6 #y coord for pawns
-      y_rook = 7
-    else
-      y_pawn = 1 #y coord for white pawns
-      y_rook = 0 
-    end
-    x = 0 
-    8.times do |pawn|
-      #make 8 pawns all starting on y coord 6
-      pawn = Pawn.new(player)
-      @board[x][y_pawn].piece = pawn
-      x += 1
-    end
-    rook1 = Rook.new(player)
-    rook2 = Rook.new(player)
-
-    @board[0][y_rook].piece = rook1
-    @board[7][y_rook].piece = rook2
-
-
-  end
 
   def on_game_board?(position)
     #simple helper function to determine if the space passed in, is on the legal board
@@ -74,13 +52,6 @@ class Board
     @board[x][y].piece.nil? ? "empty square" : @board[x][y].piece
     # @board[x][y].piece unless @board[x][y].piece.nil?
   end
-
-  # def rando 
-  #   player = Player.new("Brent", "white")
-  #   @board[0][7].piece = Pawn.new(player, [0,7])
-  #     # @board[0][7].piece = "HELLO"
-
-  # end
 
   def display_board
     puts "\n"
@@ -107,28 +78,3 @@ class Board
 
 end
 
-
-test = Board.new
-# puts test.cell_contents(1,0)
-
-# puts test
-test.display_board
-# test.rando
-player = Player.new("brent", "black")
-player2 = Player.new("cam", "white")
-test.set_pieces("black", player)
-test.set_pieces("white", player2)
-
-
-test.display_board
-
-
-# x = 0 
-# 8.times do 
-#   puts x
-#   puts test.board[x]
-#   x+=1
-# end
-
-# puts BG_WHITE
-# puts BG_BLACK
