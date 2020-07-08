@@ -1,42 +1,4 @@
-require_relative 'board'
-
-class Piece 
-  attr_accessor :position
-  attr_reader :piece, :colour
-  def initialize(player, position)
-    @piece = ''
-    @position = position
-    @colour = player.colour
-    @number_of_moves = 0
-    @eligible_moves = []
-  end
-
-
-  def find_moves(starting_position = @position)
-    #find all legal moves from the starting position
-    x_pos = starting_position[0]
-    y_pos = starting_position[1]
-    output_moves = []
-    @eligible_moves.each do |move|
-      x_move = move[0]
-      y_move = move[1]
-      potential_new_space = [(x_pos + x_move), (y_pos + y_move)]
-      if(on_game_board?(potential_new_space))
-        output_moves.push(potential_new_space)
-      end
-   end
-    return output_moves
-  end 
-
-
-end
-
-
-
-# require './lib/piece.rb'
-# require './lib/player.rb'
-
-require_relative "piece.rb"
+require_relative "piece"
 require_relative "player"
 
 
