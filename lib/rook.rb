@@ -1,5 +1,5 @@
-require_relative 'piece.rb'
-require_relative 'player.rb'
+require_relative 'piece'
+require_relative 'player'
 
 class Rook < Piece
   def initialize(player)

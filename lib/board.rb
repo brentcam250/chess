@@ -1,12 +1,14 @@
-require_relative 'pawn.rb'
-require_relative 'player.rb'
-require_relative 'cell.rb'
+require_relative 'cell'
+require_relative 'piece'
+require_relative 'pawn'
+require_relative 'player'
+
 
 BOARD_X = 0..7
 BOARD_Y = 0..7
 
 BG_BLACK = "\e[40m   \e[0m"
-BG_WHITE = "\e[47m   \e[0m"
+BG_WHITE = "\e[44m   \e[0m"
 # HIGHTLIGHT = {
 #   INITIAL: "\e[44m   \e[0m",
 #   BLANK: "\e[42m   \e[0m",
@@ -34,6 +36,31 @@ class Board
     end
   end
 
+  def set_pieces(colour, player)
+    #method to setup the pieces in their initial positions
+    if(colour == "black")
+      y_pawn = 6 #y coord for pawns
+      y_rook = 7
+    else
+      y_pawn = 1 #y coord for white pawns
+      y_rook = 0 
+    end
+    x = 0 
+    8.times do |pawn|
+      #make 8 pawns all starting on y coord 6
+      pawn = Pawn.new(player)
+      @board[x][y_pawn].piece = pawn
+      x += 1
+    end
+    rook1 = Rook.new(player)
+    rook2 = Rook.new(player)
+
+    @board[0][y_rook].piece = rook1
+    @board[7][y_rook].piece = rook2
+
+
+  end
+
   def on_game_board?(position)
     #simple helper function to determine if the space passed in, is on the legal board
     if(BOARD_X.include?(position[0])) && (BOARD_Y.include?(position[1]))
@@ -48,12 +75,12 @@ class Board
     # @board[x][y].piece unless @board[x][y].piece.nil?
   end
 
-  def rando 
-    player = Player.new("Brent", "white")
-    @board[0][7].piece = Pawn.new(player, [0,7])
-      # @board[0][7].piece = "HELLO"
+  # def rando 
+  #   player = Player.new("Brent", "white")
+  #   @board[0][7].piece = Pawn.new(player, [0,7])
+  #     # @board[0][7].piece = "HELLO"
 
-  end
+  # end
 
   def display_board
     puts "\n"
@@ -73,7 +100,7 @@ class Board
     puts "2 |  #{@board[0][1]}  |  #{@board[1][1]}  |  #{@board[2][1]}  |  #{@board[3][1]}  |  #{@board[4][1]}  |  #{@board[5][1]}  |  #{@board[6][1]}  |  #{@board[7][1]}  |"
     puts seperator
     puts "1 |  #{@board[0][0]}  |  #{@board[1][0]}  |  #{@board[2][0]}  |  #{@board[3][0]}  |  #{@board[4][0]}  |  #{@board[5][0]}  |  #{@board[6][0]}  |  #{@board[7][0]}  |"
-    puts "   -----------------------------------------------"
+    puts "   ----------------------------------------------------------------"
     puts "       A       B       C       D       E       F       G       H"
     puts "\n"
   end
@@ -86,7 +113,12 @@ test = Board.new
 
 # puts test
 test.display_board
-test.rando
+# test.rando
+player = Player.new("brent", "black")
+player2 = Player.new("cam", "white")
+test.set_pieces("black", player)
+test.set_pieces("white", player2)
+
 
 test.display_board
 

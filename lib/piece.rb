@@ -1,7 +1,7 @@
-require_relative 'board.rb'
+require_relative 'board'
 
 class Piece 
-  attr_accessor :position
+  attr_accessor :position, :display
   attr_reader :piece, :colour
   def initialize(player, position)
     @piece = ''
@@ -9,6 +9,7 @@ class Piece
     @colour = player.colour
     @number_of_moves = 0
     @eligible_moves = []
+    @display = ''
   end
 
 
@@ -28,5 +29,10 @@ class Piece
     return output_moves
   end 
 
+  def to_s 
+    @display
+  end
+
 
 end
+
