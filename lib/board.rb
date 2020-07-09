@@ -1,8 +1,8 @@
 require_relative 'cell'
-require_relative 'piece'
-require_relative 'pawn'
-require_relative 'player'
-require_relative 'rook'
+# require_relative 'piece'
+# require_relative 'pawn'
+# require_relative 'player'
+# require_relative 'rook'
 
 
 

@@ -10,11 +10,11 @@ require './lib/chess.rb'
 describe Board do
   describe "#initialize" do 
     it "actually initializes the board, aka board is not nil" do 
-      test_board = Board.new
+      test_board = Board.new()
       expect(test_board.nil?).to eql(false)
     end
     it "initializes cells with their appropriate background colour " do
-      test_board = Board.new
+      test_board = Board.new()
       expect(test_board.board[0][0].background_colour).to eql("\e[44m   \e[0m")
     end
 
@@ -56,17 +56,22 @@ end
 describe Chess do 
   describe "#initialize" do 
     it "sets two Players" do
-      game = Chess.new()
+      game = Chess.new(true)
       expect(game.player_1.nil?).to eql(false)
       expect(game.player_2.nil?).to eql(false)
 
     end
 
     it "fills a 2-d array with pieces where they belong" do
-      game = Chess.new
+      game = Chess.new(true)
 
       expect(game.board.board[0][6].piece.piece).to eql("pawn")
       expect(game.board.board[0][7].piece.piece).to eql("rook")
+      expect(game.board.board[1][7].piece.piece).to eql("knight")
+      expect(game.board.board[2][7].piece.piece).to eql("bishop")
+      expect(game.board.board[3][7].piece.piece).to eql("queen")
+      expect(game.board.board[4][7].piece.piece).to eql("king")
+
       # pieces = board.pieces
       # expect(pieces)
     end

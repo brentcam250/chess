@@ -4,6 +4,15 @@ require_relative 'player'
 require_relative 'piece'
 require_relative 'pawn'
 require_relative 'rook'
+require_relative 'king'
+require_relative 'queen'
+require_relative 'bishop'
+require_relative 'knight'
+
+
+
+
+
 
 
 
@@ -12,8 +21,8 @@ class Chess
   attr_accessor :board
   attr_reader :player_1, :player_2
   def initialize(test = false)
-    @player_1 = make_player(1, "white") unless test
-    @player_2 = make_player(2, "black") unless test
+    @player_1 = make_player(1, "white", test)
+    @player_2 = make_player(2, "black", test)
     @board = Board.new()
     set_pieces(@player_1)
     set_pieces(@player_2)
@@ -21,36 +30,60 @@ class Chess
   end
 
 
-  def make_player(player, colour)
-    #take input from user and make a new Player class with that info
-    puts "player #{player} please type your name"
-    name = gets.chomp.to_s 
-    puts "welcome #{name} you'll be playing as #{colour}"
-    player = Player.new(name, colour)
+  def make_player(player, colour, test)
+    if test 
+      return Player.new("test_player_name_#{colour}", colour)
+    else
+      #take input from user and make a new Player class with that info
+      puts "player #{player} please type your name"
+      name = gets.chomp.to_s 
+      puts "welcome #{name} you'll be playing as #{colour}"
+      player = Player.new(name, colour)
+    end
   end
 
   def set_pieces(player)
     #method to setup the pieces in their initial positions
     if(player.colour == "black")
       y_pawn = 6 #y coord for pawns
-      y_rook = 7
+      y_not_pawn = 7#y coord for all other pieces
     else
       y_pawn = 1 #y coord for white pawns
-      y_rook = 0 
+      y_not_pawn = 0 # y coord for all other pieces
     end
     x = 0 
     8.times do |pawn|
       #make 8 pawns all starting on y coord 6
       pawn = Pawn.new(player)
-      @board[x][y_pawn].piece = pawn
+      # puts @board.board[x][y_pawn].class
+      @board.board[x][y_pawn].piece = pawn
       x += 1
     end
+    #rooks
     rook1 = Rook.new(player)
     rook2 = Rook.new(player)
+    @board.board[0][y_not_pawn].piece = rook1
+    @board.board[7][y_not_pawn].piece = rook2
+    
+    #knights
+    knight1 = Knight.new(player)
+    knight2 = Knight.new(player)
+    @board.board[1][y_not_pawn].piece = knight1
+    @board.board[6][y_not_pawn].piece = knight2
 
-    @board[0][y_rook].piece = rook1
-    @board[7][y_rook].piece = rook2
+    #bishops
+    bishop1 = Bishop.new(player)
+    bishop2 = Bishop.new(player)
+    @board.board[2][y_not_pawn].piece = bishop1
+    @board.board[5][y_not_pawn].piece = bishop2
 
+    #queen
+    queen = Queen.new(player)
+    @board.board[3][y_not_pawn].piece = queen
+
+    #king
+    king = King.new(player)
+    @board.board[4][y_not_pawn].piece = king
 
   end
 
@@ -59,3 +92,8 @@ class Chess
   end
 
 end
+
+
+game = Chess.new(true)
+
+game.board.display_board
