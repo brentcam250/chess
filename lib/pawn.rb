@@ -3,6 +3,7 @@ require_relative "player"
 
 
 class Pawn < Piece
+  attr_reader :eligible_moves, :piece, :colour
   def initialize(player)
     @piece = 'pawn'
     @colour = player.colour
@@ -43,12 +44,12 @@ class Pawn < Piece
   end
 end
 
-player = Player.new('Brent', "black")
+# player = Player.new('Brent', "black")
 
-test = Pawn.new(player)
+# test = Pawn.new(player)
 
-# puts test
+# # puts test
 
-puts Pawn.superclass
+# puts Pawn.superclass
 
-puts test.pawn_moves
+# puts test.pawn_moves

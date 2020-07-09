@@ -2,6 +2,7 @@ require_relative 'piece'
 require_relative 'player'
 
 class Rook < Piece
+  attr_reader :piece, :colour
   def initialize(player)
     @piece = "rook"
     @colour = player.colour
