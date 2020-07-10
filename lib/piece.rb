@@ -23,7 +23,7 @@ class Piece
       y_move = move[1]
       potential_new_space = [(x_pos + x_move), (y_pos + y_move)]
       if(on_game_board?(potential_new_space))
-        output_moves.push(potential_new_space)
+        output_moves << (potential_new_space)
       end
    end
     return output_moves

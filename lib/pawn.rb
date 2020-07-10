@@ -24,18 +24,6 @@ class Pawn < Piece
     end
   end
 
-  # def available_moves()
-  #   if(@number_of_moves == 0)
-  #     #on its first move, a pawn may move 1 or 2 squares up.
-  #     moves = [[0,1],[0,2]]
-  #   else
-  #     moves = [0,1]
-  #     #moves = [[0,1],[1,1],[-1,1]
-  #     #possible moves if there are killable pieces.
-  #     #need to find out a way to determine if there are killable pieces
-  #   end
-
-  # end
 
   def to_s 
     @colour == 'black' ? output = " \u265F " : output = " \u2659 "
@@ -43,13 +31,3 @@ class Pawn < Piece
     # output
   end
 end
-
-# player = Player.new('Brent', "black")
-
-# test = Pawn.new(player)
-
-# # puts test
-
-# puts Pawn.superclass
-
-# puts test.pawn_moves

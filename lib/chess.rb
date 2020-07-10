@@ -9,7 +9,11 @@ require_relative 'queen'
 require_relative 'bishop'
 require_relative 'knight'
 
-
+# HIGHLIGHT = {
+#   INITIAL: "\e[43m   \e[0m",
+#   BLANK: "\e[42m   \e[0m",
+#   ENEMY: "\e[41m   \e[0m"
+# }
 
 class Chess
   #main class that will run the game, uses external classes board, and piece.
@@ -85,12 +89,12 @@ class Chess
 
   end
 
-  def get_move(player)
+  def select_piece(player)
     puts "to enter your move, first select a piece by typing first the x-coordinate of your target piece"
-    x_coord = gets.chomp.to_s.downcase
+    x_coord = gets.chomp.to_i
     until (1..8).include?(x_coord)
       puts "please enter a number from 1-8 for the x-coordinate"
-      x_coord = gets.chomp.to_s
+      x_coord = gets.chomp.to_i
     end
     puts "now enter a number from 1-8 for the y-coordinate"
     y_coord = gets.chomp.to_i
@@ -102,12 +106,19 @@ class Chess
     x_coord -= 1
     y_coord -= 1
 
-    if @board[x_coord][y_coord].piece.nil?
+    puts "I am gonna do a thing"
+    
+    puts @board.board[x_coord][y_coord].class
+
+    if @board.board[x_coord][y_coord].piece.nil?
       puts "theres no piece there lets try this again."
-      get_move(player)
-    elsif @board[x_coord][y_coord].piece.player != player
+      select_piece(player)
+    elsif @board.board[x_coord][y_coord].piece.colour != player.colour
       puts "you cant move the other players pieces! try again!"
-      get_move(player)
+      select_piece(player)
+    else
+      #legit piece
+      @board.board[x_coord][y_coord].background_colour = HIGHLIGHT[:INITIAL]
     end
       
   end
@@ -117,7 +128,7 @@ class Chess
     until (@checkmate || @stalemate || i >= 30)
       @board.display_board
       puts "player: #{i % 2 == 0 ? player_1.name : player_2.name} its your turn"
-      i % 2 == 0 ? get_move(player_1) : get_move(player_2)
+      i % 2 == 0 ? select_piece(player_1) : select_piece(player_2)
 
       i += 1 
     end
@@ -129,3 +140,5 @@ end
 game = Chess.new(true)
 
 game.board.display_board
+
+game.game

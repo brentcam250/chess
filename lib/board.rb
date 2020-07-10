@@ -1,8 +1,5 @@
 require_relative 'cell'
-# require_relative 'piece'
-# require_relative 'pawn'
-# require_relative 'player'
-# require_relative 'rook'
+
 
 
 
@@ -11,7 +8,7 @@ BOARD_Y = 0..7
 
 BG_BLACK = "\e[40m   \e[0m"
 BG_WHITE = "\e[44m   \e[0m"
-HIGHTLIGHT = {
+HIGHLIGHT = {
   INITIAL: "\e[43m   \e[0m",
   BLANK: "\e[42m   \e[0m",
   ENEMY: "\e[41m   \e[0m"
