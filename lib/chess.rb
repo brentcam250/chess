@@ -106,10 +106,6 @@ class Chess
     x_coord -= 1
     y_coord -= 1
 
-    puts "I am gonna do a thing"
-    
-    puts @board.board[x_coord][y_coord].class
-
     if @board.board[x_coord][y_coord].piece.nil?
       puts "theres no piece there lets try this again."
       select_piece(player)
@@ -119,6 +115,11 @@ class Chess
     else
       #legit piece
       @board.board[x_coord][y_coord].background_colour = HIGHLIGHT[:INITIAL]
+
+      piece = @board.board[x_coord][y_coord].piece
+      puts piece
+      # moves = @board.board[x_coord][y_coord].piece.find_moves
+      # puts moves
     end
       
   end
