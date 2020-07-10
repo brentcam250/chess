@@ -11,11 +11,11 @@ BOARD_Y = 0..7
 
 BG_BLACK = "\e[40m   \e[0m"
 BG_WHITE = "\e[44m   \e[0m"
-# HIGHTLIGHT = {
-#   INITIAL: "\e[44m   \e[0m",
-#   BLANK: "\e[42m   \e[0m",
-#   ENEMY: "\e[41m   \e[0m"
-# }
+HIGHTLIGHT = {
+  INITIAL: "\e[43m   \e[0m",
+  BLANK: "\e[42m   \e[0m",
+  ENEMY: "\e[41m   \e[0m"
+}
 
 class Board 
   attr_accessor :board
@@ -72,7 +72,7 @@ class Board
     puts seperator
     puts "1 |  #{@board[0][0]}  |  #{@board[1][0]}  |  #{@board[2][0]}  |  #{@board[3][0]}  |  #{@board[4][0]}  |  #{@board[5][0]}  |  #{@board[6][0]}  |  #{@board[7][0]}  |"
     puts "   ----------------------------------------------------------------"
-    puts "       A       B       C       D       E       F       G       H"
+    puts "       1       2       3       4       5       6       7       8"
     puts "\n"
   end
 

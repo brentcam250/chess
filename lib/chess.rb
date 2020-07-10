@@ -11,21 +11,19 @@ require_relative 'knight'
 
 
 
-
-
-
-
-
 class Chess
   #main class that will run the game, uses external classes board, and piece.
-  attr_accessor :board
+  attr_accessor :board, :checkmate, :stalemate
   attr_reader :player_1, :player_2
   def initialize(test = false)
     @player_1 = make_player(1, "white", test)
     @player_2 = make_player(2, "black", test)
     @board = Board.new()
+    @checkmate = false
+    @stalemate = false
     set_pieces(@player_1)
     set_pieces(@player_2)
+
 
   end
 
@@ -87,8 +85,42 @@ class Chess
 
   end
 
-  def game()
+  def get_move(player)
+    puts "to enter your move, first select a piece by typing first the x-coordinate of your target piece"
+    x_coord = gets.chomp.to_s.downcase
+    until (1..8).include?(x_coord)
+      puts "please enter a number from 1-8 for the x-coordinate"
+      x_coord = gets.chomp.to_s
+    end
+    puts "now enter a number from 1-8 for the y-coordinate"
+    y_coord = gets.chomp.to_i
+    until (1..8).include?(y_coord)
+      puts "enter a number from 1-8 please"
+      y_coord = gets.chomp.to_i
+    end
+    #translate the coords to 0 based indexing
+    x_coord -= 1
+    y_coord -= 1
 
+    if @board[x_coord][y_coord].piece.nil?
+      puts "theres no piece there lets try this again."
+      get_move(player)
+    elsif @board[x_coord][y_coord].piece.player != player
+      puts "you cant move the other players pieces! try again!"
+      get_move(player)
+    end
+      
+  end
+
+  def game()
+    i = 0
+    until (@checkmate || @stalemate || i >= 30)
+      @board.display_board
+      puts "player: #{i % 2 == 0 ? player_1.name : player_2.name} its your turn"
+      i % 2 == 0 ? get_move(player_1) : get_move(player_2)
+
+      i += 1 
+    end
   end
 
 end

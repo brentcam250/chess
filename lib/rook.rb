@@ -25,7 +25,7 @@ class Rook < Piece
   
   
   def to_s 
-    @colour == 'black' ? output = "\u265C" : output = "\u2656"
+    @colour == 'black' ? output = " \u265C " : output = " \u2656 "
     output = output.encode('utf-8')
     # output
   end

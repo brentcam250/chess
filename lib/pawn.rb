@@ -38,7 +38,7 @@ class Pawn < Piece
   # end
 
   def to_s 
-    @colour == 'black' ? output = "\u265F" : output = "\u2659"
+    @colour == 'black' ? output = " \u265F " : output = " \u2659 "
     output = output.encode('utf-8')
     # output
   end

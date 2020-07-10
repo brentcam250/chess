@@ -17,7 +17,7 @@ class Queen < Piece
   
   
   def to_s 
-    @colour == 'black' ? output = "\u2655" : output = "\u265B"
+    @colour == 'black' ? output = " \u2655 " : output = " \u265B "
     output = output.encode('utf-8')
     # output
   end

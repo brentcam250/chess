@@ -25,7 +25,7 @@ class Bishop < Piece
   
   
   def to_s 
-    @colour == 'black' ? output = "\u265D" : output = "\u2657"
+    @colour == 'black' ? output = " \u265D " : output = " \u2657 "
     output = output.encode('utf-8')
     # output
   end

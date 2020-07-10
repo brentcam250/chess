@@ -25,7 +25,7 @@ class Knight < Piece
   
   
   def to_s 
-    @colour == 'black' ? output = "\u265E" : output = "\u2658"
+    @colour == 'black' ? output = " \u265E " : output = " \u2658 "
     output = output.encode('utf-8')
     # output
   end

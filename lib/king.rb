@@ -18,7 +18,7 @@ class King < Piece
   
   
   def to_s 
-    @colour == 'black' ? output = "\u265A" : output = "\u2654"
+    @colour == 'black' ? output = " \u265A " : output = " \u2654 "
     output = output.encode('utf-8')
     # output
   end
