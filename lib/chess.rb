@@ -117,11 +117,30 @@ class Chess
       @board.board[x_coord][y_coord].background_colour = HIGHLIGHT[:INITIAL]
 
       piece = @board.board[x_coord][y_coord].piece
+      piece.position = [x_coord, y_coord]
+      highlight_moves(piece)
       puts piece
       # moves = @board.board[x_coord][y_coord].piece.find_moves
       # puts moves
     end
       
+  end
+
+  def highlight_moves(piece)
+    puts "hello im in highlight moves"
+
+    # puts "position = #{piece.position}"
+    # moves = piece.eligible_moves
+    moves = piece.find_moves
+    puts "moves = #{moves}"
+    moves.each do |move|
+      #highlight all potential squares
+      x_move = move[0]
+      y_move = move[1]
+      @board.board[x_move][y_move].background_colour = HIGHLIGHT[:BLANK]
+    end
+    # moves = piece.find_moves
+    # puts moves
   end
 
   def game()

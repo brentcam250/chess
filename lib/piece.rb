@@ -1,5 +1,3 @@
-
-
 class Piece 
   attr_accessor :position, :display
   attr_reader :piece, :colour
@@ -18,14 +16,27 @@ class Piece
     x_pos = starting_position[0]
     y_pos = starting_position[1]
     output_moves = []
+    puts "eligible = #{@eligible_moves}"
     @eligible_moves.each do |move|
+      puts "looping moves: #{move}"
       x_move = move[0]
       y_move = move[1]
-      potential_new_space = [(x_pos + x_move), (y_pos + y_move)]
-      if(on_game_board?(potential_new_space))
+      puts "x: #{x_move}"
+      puts "y: #{y_move}"
+
+      x_new = x_pos + x_move
+      y_new = y_pos + y_move
+      if((0..7).include?(x_new) && (0..7).include?(y_new))
+        #then its on the legal board
+        potential_new_space = [x_new, y_new]
         output_moves << (potential_new_space)
+        
+      else
+        #ignore that space its not legit
       end
+
    end
+    puts "returning the following moves #{output_moves}"
     return output_moves
   end 
 
