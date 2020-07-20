@@ -137,7 +137,17 @@ class Chess
       #highlight all potential squares
       x_move = move[0]
       y_move = move[1]
-      @board.board[x_move][y_move].background_colour = HIGHLIGHT[:BLANK]
+      #first must find if there are other pieces in the potential moves
+      if(@board.board[x_move][y_move].piece.nil?)
+        #then the square is empty
+        @board.board[x_move][y_move].background_colour = HIGHLIGHT[:BLANK]
+      elsif piece.colour == @board.board[x_move][y_move].piece.colour
+        puts "friendly fire!"
+        #"full space"
+      else
+        puts "full space"
+      
+      end
     end
     # moves = piece.find_moves
     # puts moves
