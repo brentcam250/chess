@@ -2,11 +2,16 @@ require_relative 'piece'
 require_relative 'player'
 
 class Rook < Piece
-  attr_reader :piece, :colour
+  attr_reader :piece, :colour, :directions
   def initialize(player)
     @piece = "rook"
     @colour = player.colour
     @eligible_moves = rook_moves()
+    @directions = rook_directions()
+  end
+
+  def rook_directions()
+    return ['north', 'south', 'east', 'west']
   end
 
   def rook_moves()

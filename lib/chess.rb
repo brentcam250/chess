@@ -126,44 +126,65 @@ class Chess
         #dont do walk_this_way do a knight routine instead
 
       else
-
+        directions = piece.directions
+        directions.each do |direction|
+          walk_this_way(piece.position, direction, piece)
+        end
       end
 
-      # walk_this_way([x_coord-1,y_coord], "west", piece)
-      # walk_this_way([x_coord,y_coord-1], "south", piece)
-      walk_this_way([x_coord+1,y_coord], "east", piece)
-      walk_this_way([x_coord,y_coord+1], "north", piece)
-
-
-      # find_path_recursive(moves, piece)
-      # puts piece
-      # moves = @board.board[x_coord][y_coord].piece.find_moves
-      # puts moves
+      # # walk_this_way([x_coord-1,y_coord], "west", piece)
+      # # walk_this_way([x_coord,y_coord-1], "south", piece)
+      # walk_this_way([x_coord+1,y_coord], "east", piece)
+      # walk_this_way([x_coord,y_coord+1], "north", piece)
     end
+
+    # end
       
+  end
+
+  def direction_caller(position, direction, piece)
+    x = position[0]
+    y = position[1]
+    # return unless (0..7).include?(x)
+    # return unless (0..7).include?(y)
+    case direction 
+    when "west"
+      walk_this_way([x-1,y], "west", piece)
+    when "east"
+      walk_this_way([x+1,y], "east", piece)
+    when "north"
+      walk_this_way([x,y+1], "north", piece)
+    when "south"
+      walk_this_way([x,y-1], "south", piece)
+    when "northwest"
+      walk_this_way([x-1, y+1], "northwest", piece)
+    when "northeast"
+      walk_this_way([x+1,y+1], "northeast",piece)
+    when "southwest"
+      walk_this_way([x-1,y-1], "southwest", piece)
+    when "southeast"
+      walk_this_way([x+1,y-1], "southeast", piece)
+    else
+      puts "fill in the part where its an angle direction"
+    end
+    
   end
 
   def walk_this_way(position, direction, piece)
     x = position[0]
     y = position[1]
-
-    if(@board.board[x][y].piece.nil?)
+    return unless (0..7).include?(x)
+    return unless (0..7).include?(y)
+    if(@board.board[x][y].piece == piece)
+      #this is the first check, and the piece is checking itself.
+      direction_caller(position, direction, piece)
+    elsif(@board.board[x][y].piece.nil?)
+      #empty space
       puts "empty space"
       #empty sqaure, must highlight and recurse
       @board.board[x][y].background_colour = HIGHLIGHT[:BLANK]
-      case direction 
-      when "west"
-        walk_this_way([x-1,y], "west", piece)
-      when "east"
-        walk_this_way([x+1,y], "east", piece)
-      when "north"
-        walk_this_way([x,y+1], "north", piece)
-      when "south"
-        walk_this_way([x,y-1], "south", piece)
-      else
-        puts "fill in the part where its an angle direction"
-      end
-
+      puts "board background = #{@board.board[x][y].background_colour}"
+      direction_caller(position,direction, piece)
     elsif(@board.board[x][y].piece.colour == piece.colour && piece != @board.board[x][y].piece)
       #friendly piece no highlight, but stop
       puts "friendly fire"
