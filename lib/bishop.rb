@@ -11,12 +11,15 @@ class Bishop < Piece
 
   def bishop_moves()
     moves = []
-    # i = 0
-    # 8.times do 
-    #   moves << [0,i]
-    #   moves << [i,0]
-    #   i += 1 
-    # end
+    i = 0
+    8.times do 
+      moves << [i,i]
+      moves << [i,-i]
+      moves << [-i,i]
+      moves << [-i,-i]
+
+      i += 1 
+    end
     
     return moves
 

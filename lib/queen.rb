@@ -10,6 +10,19 @@ class Queen < Piece
 
   def queen_moves()
     
+    moves = []
+    i = 0
+    8.times do 
+      moves << [0,i]
+      moves << [i,0]
+      moves << [i,i]
+      moves << [-i,i]
+      moves << [i,-i]
+      moves << [-i,-i]
+      i += 1 
+    end
+    
+    return moves
     #return [[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,-1],[-1,1]]
 
   end

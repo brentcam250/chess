@@ -54,13 +54,14 @@ class Chess
       y_not_pawn = 0 # y coord for all other pieces
     end
     x = 0 
-    8.times do |pawn|
-      #make 8 pawns all starting on y coord 6
-      pawn = Pawn.new(player)
-      # puts @board.board[x][y_pawn].class
-      @board.board[x][y_pawn].piece = pawn
-      x += 1
-    end
+    #pawns
+    # 8.times do |pawn|
+    #   #make 8 pawns all starting on y coord 6
+    #   pawn = Pawn.new(player)
+    #   # puts @board.board[x][y_pawn].class
+    #   @board.board[x][y_pawn].piece = pawn
+    #   x += 1
+    # end
     #rooks
     rook1 = Rook.new(player)
     rook2 = Rook.new(player)
@@ -118,21 +119,118 @@ class Chess
 
       piece = @board.board[x_coord][y_coord].piece
       piece.position = [x_coord, y_coord]
-      highlight_moves(piece)
-      puts piece
+      # highlight_moves(piece)
+      # moves = piece.find_moves
+
+      if(piece.piece == "knight")
+        #dont do walk_this_way do a knight routine instead
+
+      else
+
+      end
+
+      # walk_this_way([x_coord-1,y_coord], "west", piece)
+      # walk_this_way([x_coord,y_coord-1], "south", piece)
+      walk_this_way([x_coord+1,y_coord], "east", piece)
+      walk_this_way([x_coord,y_coord+1], "north", piece)
+
+
+      # find_path_recursive(moves, piece)
+      # puts piece
       # moves = @board.board[x_coord][y_coord].piece.find_moves
       # puts moves
     end
       
   end
 
+  def walk_this_way(position, direction, piece)
+    x = position[0]
+    y = position[1]
+
+    if(@board.board[x][y].piece.nil?)
+      puts "empty space"
+      #empty sqaure, must highlight and recurse
+      @board.board[x][y].background_colour = HIGHLIGHT[:BLANK]
+      case direction 
+      when "west"
+        walk_this_way([x-1,y], "west", piece)
+      when "east"
+        walk_this_way([x+1,y], "east", piece)
+      when "north"
+        walk_this_way([x,y+1], "north", piece)
+      when "south"
+        walk_this_way([x,y-1], "south", piece)
+      else
+        puts "fill in the part where its an angle direction"
+      end
+
+    elsif(@board.board[x][y].piece.colour == piece.colour && piece != @board.board[x][y].piece)
+      #friendly piece no highlight, but stop
+      puts "friendly fire"
+      return
+
+
+    else
+      #enemy piece, must highlight and stop
+      puts "open fire"
+      @board.board[x][y].background_colour = HIGHLIGHT[:ENEMY]
+      return
+    end
+
+  end
+
+  def find_path_recursive(moves, piece)
+    move = moves.shift
+    return if move.nil?
+    puts "hello #{move}"
+    puts "also hello moves #{moves}"
+    x = move[0]
+    y = move[1]
+    unless(@board.board[x][y].piece.nil?)
+      puts "made it to unless"
+      if(piece.colour == @board.board[x][y].piece.colour)
+        #friendly piece
+        puts "friendly fire"
+        return
+      else
+        #enemy piece still need to return because we cant move past an enemy either
+        @board.board[x_coord][y_coord].background_colour = HIGHLIGHT[:ENEMY]
+        return
+      end
+    else
+      puts " i should highlight"
+      #then no piece and we must recursively call function
+      @board.board[x][y].background_colour = HIGHLIGHT[:BLANK]
+      find_path_recursive(moves, piece)
+    end 
+
+  end
+
+  # def find_path(piece)
+  #   moves = piece.find_moves
+  #   blocked_north = false
+  #   blocked_south = false
+  #   blocked_east = false
+  #   blocked_west = false
+
+  #   blocked_north_west = false
+  #   blocked_north_east = false
+  #   blocked_south_west = false
+  #   blocekd_south_east = false
+  #   moves.each do |move| 
+  #     x_move = move[0]
+  #     y_move = move[1]
+
+
+  #   end
+  # end
+
   def highlight_moves(piece)
-    puts "hello im in highlight moves"
 
     # puts "position = #{piece.position}"
     # moves = piece.eligible_moves
     moves = piece.find_moves
-    puts "moves = #{moves}"
+    # puts "moves = #{moves}"
     moves.each do |move|
       #highlight all potential squares
       x_move = move[0]
@@ -143,9 +241,9 @@ class Chess
         @board.board[x_move][y_move].background_colour = HIGHLIGHT[:BLANK]
       elsif piece.colour == @board.board[x_move][y_move].piece.colour
         puts "friendly fire!"
-        #"full space"
       else
         puts "full space"
+        #must check to see if there are friendly pieces along the path that we are following.
       
       end
     end

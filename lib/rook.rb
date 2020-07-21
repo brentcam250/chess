@@ -15,6 +15,8 @@ class Rook < Piece
     8.times do 
       moves << [0,i]
       moves << [i,0]
+      moves << [0,-i]
+      moves << [-i,0]
       i += 1 
     end
     
