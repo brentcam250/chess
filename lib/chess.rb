@@ -55,13 +55,13 @@ class Chess
     end
     x = 0 
     #pawns
-    # 8.times do |pawn|
-    #   #make 8 pawns all starting on y coord 6
-    #   pawn = Pawn.new(player)
-    #   # puts @board.board[x][y_pawn].class
-    #   @board.board[x][y_pawn].piece = pawn
-    #   x += 1
-    # end
+    8.times do |pawn|
+      #make 8 pawns all starting on y coord 6
+      pawn = Pawn.new(player)
+      # puts @board.board[x][y_pawn].class
+      @board.board[x][y_pawn].piece = pawn
+      x += 1
+    end
     #rooks
     rook1 = Rook.new(player)
     rook2 = Rook.new(player)
@@ -193,7 +193,7 @@ class Chess
       direction_caller(position,direction, piece, output_moves)
     elsif(@board.board[x][y].piece.colour == piece.colour)
       #friendly piece
-      
+
       return
 
 
@@ -206,32 +206,7 @@ class Chess
 
   end
 
-  def find_path_recursive(moves, piece)
-    move = moves.shift
-    return if move.nil?
-    puts "hello #{move}"
-    puts "also hello moves #{moves}"
-    x = move[0]
-    y = move[1]
-    unless(@board.board[x][y].piece.nil?)
-      puts "made it to unless"
-      if(piece.colour == @board.board[x][y].piece.colour)
-        #friendly piece
-        puts "friendly fire"
-        return
-      else
-        #enemy piece still need to return because we cant move past an enemy either
-        @board.board[x_coord][y_coord].background_colour = HIGHLIGHT[:ENEMY]
-        return
-      end
-    else
-      puts " i should highlight"
-      #then no piece and we must recursively call function
-      @board.board[x][y].background_colour = HIGHLIGHT[:BLANK]
-      find_path_recursive(moves, piece)
-    end 
 
-  end
 
 
 
@@ -261,15 +236,25 @@ class Chess
     # puts moves
   end
 
+  def handle_knight(piece)
+    highlight_moves(piece)
+  end
+
+  def handle_pawn(piece)
+    
+  end
+
   def handle_turn(player)
     #this function handles a players turn instead of passing from one function to the next, it collects return values and calls the appropriate func
     piece = select_piece(player)
-    puts "piece #{piece}"
+    # puts "piece #{piece}"
     case piece.piece
     when "knight"
       puts "do knight"
+      handle_knight(piece)
     when "pawn"
       puts "do pawn"
+      handle_pawn(piece)
     when "king"
       puts "do king"
     else
