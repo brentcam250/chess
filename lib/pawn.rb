@@ -3,24 +3,29 @@ require_relative "player"
 
 
 class Pawn < Piece
-  attr_reader :eligible_moves, :piece, :colour
-  attr_accessor :first_move
+  attr_accessor :eligible_moves, :piece, :colour, :first
+  # attr_accessor :first
   def initialize(player)
     @piece = 'pawn'
     @colour = player.colour
+    @first = true
     # @available_moves = available_moves()
     @eligible_moves = pawn_moves()
     @killable_neighbour = false
-    @first_move = true
+    
+  end
+
+  def first? ()
+    @first
   end
 
   def pawn_moves()
-    if @first_move == true
+    if @first == true
       if @colour == 'black'
-        @first_move = false
+        @first = false
         return [[0,-1], [0,-2]]
       else
-        @first_move = false
+        @first = false
         return [[0,1], [0,2]]
       end
     elsif (@killable_neighbour)

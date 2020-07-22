@@ -241,7 +241,14 @@ class Chess
   end
 
   def handle_pawn(piece)
-    
+    # puts piece.first?
+    # puts "piece.firstmove = #{piece.first?}"
+    highlight_moves(piece)
+  end
+
+  def handle_king(piece)
+    #trick here is that king cannot move into a space that puts him in check
+    highlight_moves(piece)
   end
 
   def handle_turn(player)
@@ -257,6 +264,7 @@ class Chess
       handle_pawn(piece)
     when "king"
       puts "do king"
+      handle_king(piece)
     else
       #piece that has regular moves unlimited distance.
       directions = piece.directions
