@@ -119,18 +119,23 @@ class Chess
 
       piece = @board.board[x_coord][y_coord].piece
       piece.position = [x_coord, y_coord]
+      return piece
       # highlight_moves(piece)
       # moves = piece.find_moves
 
-      if(piece.piece == "knight")
-        #dont do walk_this_way do a knight routine instead
+      # if(piece.piece == "knight")
+      #   #dont do walk_this_way do a knight routine instead
 
-      else
-        directions = piece.directions
-        directions.each do |direction|
-          walk_this_way(piece.position, direction, piece)
-        end
-      end
+      # else
+        
+
+      #   directions = piece.directions
+      #   return directions
+
+      #   # directions.each do |direction|
+      #   #   walk_this_way(piece.position, direction, piece)
+      #   # end
+      # end
 
       # # walk_this_way([x_coord-1,y_coord], "west", piece)
       # # walk_this_way([x_coord,y_coord-1], "south", piece)
@@ -142,52 +147,53 @@ class Chess
       
   end
 
-  def direction_caller(position, direction, piece)
+  def direction_caller(position, direction, piece, output_moves)
     x = position[0]
     y = position[1]
-    # return unless (0..7).include?(x)
-    # return unless (0..7).include?(y)
+
     case direction 
     when "west"
-      walk_this_way([x-1,y], "west", piece)
+      walk_this_way([x-1,y], "west", piece, output_moves)
     when "east"
-      walk_this_way([x+1,y], "east", piece)
+      walk_this_way([x+1,y], "east", piece, output_moves)
     when "north"
-      walk_this_way([x,y+1], "north", piece)
+      walk_this_way([x,y+1], "north", piece, output_moves)
     when "south"
-      walk_this_way([x,y-1], "south", piece)
+      walk_this_way([x,y-1], "south", piece, output_moves)
     when "northwest"
-      walk_this_way([x-1, y+1], "northwest", piece)
+      walk_this_way([x-1, y+1], "northwest", piece, output_moves)
     when "northeast"
-      walk_this_way([x+1,y+1], "northeast",piece)
+      walk_this_way([x+1,y+1], "northeast",piece, output_moves)
     when "southwest"
-      walk_this_way([x-1,y-1], "southwest", piece)
+      walk_this_way([x-1,y-1], "southwest", piece, output_moves)
     when "southeast"
-      walk_this_way([x+1,y-1], "southeast", piece)
+      walk_this_way([x+1,y-1], "southeast", piece, output_moves)
     else
-      puts "fill in the part where its an angle direction"
+      puts "Something is wrong in the move switch"
     end
     
   end
 
-  def walk_this_way(position, direction, piece)
+  def walk_this_way(position, direction, piece, output_moves = [])
     x = position[0]
     y = position[1]
     return unless (0..7).include?(x)
     return unless (0..7).include?(y)
     if(@board.board[x][y].piece == piece)
       #this is the first check, and the piece is checking itself.
-      direction_caller(position, direction, piece)
+      direction_caller(position, direction, piece, output_moves)
     elsif(@board.board[x][y].piece.nil?)
-      #empty space
-      puts "empty space"
       #empty sqaure, must highlight and recurse
+      puts "empty space"
+      output_moves << [x,y]
+      #remember this move as an available choice
+      
       @board.board[x][y].background_colour = HIGHLIGHT[:BLANK]
-      puts "board background = #{@board.board[x][y].background_colour}"
-      direction_caller(position,direction, piece)
-    elsif(@board.board[x][y].piece.colour == piece.colour && piece != @board.board[x][y].piece)
-      #friendly piece no highlight, but stop
-      puts "friendly fire"
+      # puts "board background = #{@board.board[x][y].background_colour}"
+      direction_caller(position,direction, piece, output_moves)
+    elsif(@board.board[x][y].piece.colour == piece.colour)
+      #friendly piece
+      
       return
 
 
@@ -227,24 +233,7 @@ class Chess
 
   end
 
-  # def find_path(piece)
-  #   moves = piece.find_moves
-  #   blocked_north = false
-  #   blocked_south = false
-  #   blocked_east = false
-  #   blocked_west = false
 
-  #   blocked_north_west = false
-  #   blocked_north_east = false
-  #   blocked_south_west = false
-  #   blocekd_south_east = false
-  #   moves.each do |move| 
-  #     x_move = move[0]
-  #     y_move = move[1]
-
-
-  #   end
-  # end
 
   def highlight_moves(piece)
 
@@ -272,12 +261,33 @@ class Chess
     # puts moves
   end
 
+  def handle_turn(player)
+    #this function handles a players turn instead of passing from one function to the next, it collects return values and calls the appropriate func
+    piece = select_piece(player)
+    puts "piece #{piece}"
+    case piece.piece
+    when "knight"
+      puts "do knight"
+    when "pawn"
+      puts "do pawn"
+    when "king"
+      puts "do king"
+    else
+      #piece that has regular moves unlimited distance.
+      directions = piece.directions
+      directions.each do |direction|
+        walk_this_way(piece.position, direction, piece)
+      end
+    end
+
+  end
+
   def game()
     i = 0
     until (@checkmate || @stalemate || i >= 30)
       @board.display_board
       puts "player: #{i % 2 == 0 ? player_1.name : player_2.name} its your turn"
-      i % 2 == 0 ? select_piece(player_1) : select_piece(player_2)
+      i % 2 == 0 ? handle_turn(player_1) : handle_turn(player_2)
 
       i += 1 
     end
