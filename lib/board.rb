@@ -35,6 +35,14 @@ class Board
     end
   end
 
+  def clear_highlights
+    @board.each do |row|
+      row.each do |cell|
+        cell.highlight = false
+      end
+    end
+  end
+
 
   def on_game_board?(position)
     #simple helper function to determine if the space passed in, is on the legal board

@@ -1,5 +1,5 @@
 class Cell
-  attr_accessor :background_colour, :piece
+  attr_accessor :background_colour, :piece, :highlight
   def initialize(background_colour, piece = nil)
     @background_colour = background_colour
     @piece = piece

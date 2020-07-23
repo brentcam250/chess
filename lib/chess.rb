@@ -120,27 +120,7 @@ class Chess
       piece = @board.board[x_coord][y_coord].piece
       piece.position = [x_coord, y_coord]
       return piece
-      # highlight_moves(piece)
-      # moves = piece.find_moves
-
-      # if(piece.piece == "knight")
-      #   #dont do walk_this_way do a knight routine instead
-
-      # else
-        
-
-      #   directions = piece.directions
-      #   return directions
-
-      #   # directions.each do |direction|
-      #   #   walk_this_way(piece.position, direction, piece)
-      #   # end
-      # end
-
-      # # walk_this_way([x_coord-1,y_coord], "west", piece)
-      # # walk_this_way([x_coord,y_coord-1], "south", piece)
-      # walk_this_way([x_coord+1,y_coord], "east", piece)
-      # walk_this_way([x_coord,y_coord+1], "north", piece)
+     
     end
 
     # end
@@ -177,8 +157,8 @@ class Chess
   def walk_this_way(position, direction, piece, output_moves = [])
     x = position[0]
     y = position[1]
-    return unless (0..7).include?(x)
-    return unless (0..7).include?(y)
+    return output_moves unless (0..7).include?(x)
+    return output_moves unless (0..7).include?(y)
     if(@board.board[x][y].piece == piece)
       #this is the first check, and the piece is checking itself.
       direction_caller(position, direction, piece, output_moves)
@@ -194,7 +174,7 @@ class Chess
     elsif(@board.board[x][y].piece.colour == piece.colour)
       #friendly piece
 
-      return
+      return output_moves
 
 
     else
@@ -211,11 +191,9 @@ class Chess
 
 
   def highlight_moves(piece)
-
-    # puts "position = #{piece.position}"
-    # moves = piece.eligible_moves
+    #this function is only used for knight, pawn, king the "non-repeating move pieces"
+    eligible_moves = []
     moves = piece.find_moves
-    # puts "moves = #{moves}"
     moves.each do |move|
       #highlight all potential squares
       x_move = move[0]
@@ -224,55 +202,115 @@ class Chess
       if(@board.board[x_move][y_move].piece.nil?)
         #then the square is empty
         @board.board[x_move][y_move].background_colour = HIGHLIGHT[:BLANK]
+        eligible_moves << [x_move, y_move]
       elsif piece.colour == @board.board[x_move][y_move].piece.colour
         puts "friendly fire!"
+      elsif piece.piece == 'knight'
+        #knight can hop we dont need to check the path
+        eligible_moves << [x_move,y_move]
       else
         puts "full space"
         #must check to see if there are friendly pieces along the path that we are following.
+        #note this is handled differently for the "repeating move" pieces
       
       end
     end
+    return eligible_moves
     # moves = piece.find_moves
     # puts moves
   end
 
-  def handle_knight(piece)
-    highlight_moves(piece)
-  end
+  # def handle_knight(piece)
+  #   highlight_moves(piece)
+  # end
 
-  def handle_pawn(piece)
-    # puts piece.first?
-    # puts "piece.firstmove = #{piece.first?}"
-    highlight_moves(piece)
-  end
+  # def handle_pawn(piece)
+  #   # puts piece.first?
+  #   # puts "piece.firstmove = #{piece.first?}"
+  #   highlight_moves(piece)
+  # end
 
-  def handle_king(piece)
-    #trick here is that king cannot move into a space that puts him in check
-    highlight_moves(piece)
+  # def handle_king(piece)
+  #   #trick here is that king cannot move into a space that puts him in check
+  #   highlight_moves(piece)
+  # end
+
+  def choose_move(moves, player)
+    #convert from 0 based index
+    moves.each do |move|
+      move[0] += 1
+      move[1] += 1
+    end
+    puts "player #{player.name} please select an ending position for the piece from the following options #{moves}"
+    puts "please type the x- coordinate"
+    x = gets.chomp.to_i
+    puts "please type the y- coordinate"
+    y = gets.chomp.to_i
+    until moves.include?([x,y])
+      puts "#{x}, #{y} is not an eligible move please try again"
+      puts "please type the x- coordinate"
+      x = gets.chomp.to_i
+      puts "please type the y- coordinate"
+      y = gets.chomp.to_i
+    end
+    puts "you've selected the move #{x}, #{y}"
+
+    return [x,y]
+  
   end
 
   def handle_turn(player)
     #this function handles a players turn instead of passing from one function to the next, it collects return values and calls the appropriate func
     piece = select_piece(player)
     # puts "piece #{piece}"
+    moves = []
     case piece.piece
     when "knight"
       puts "do knight"
-      handle_knight(piece)
+      # handle_knight(piece)
+      moves = highlight_moves(piece)
     when "pawn"
       puts "do pawn"
-      handle_pawn(piece)
+      # handle_pawn(piece)
+      moves = highlight_moves(piece)
     when "king"
       puts "do king"
-      handle_king(piece)
+      # handle_king(piece)
+      moves = highlight_moves(piece)
     else
       #piece that has regular moves unlimited distance.
       directions = piece.directions
       directions.each do |direction|
-        walk_this_way(piece.position, direction, piece)
+        moves << walk_this_way(piece.position, direction, piece)
       end
     end
 
+    #now we have the eligible moves, time to get some input from player about their selection.
+    selected = choose_move(moves, player)
+    x_target = selected[0]
+    y_target = selected[1]
+
+    #remove the piece from the old position
+    old_space = piece.position
+    old_x = old_space[0]
+    old_y = old_space[1]
+    @board.board[old_x][old_y].piece = nil
+
+    #move the piece
+    @board.board[x_target][y_target].piece = piece
+    piece.position = [x_target,y_target]
+    puts "piece.position = #{piece.position}"
+    puts "boards info #{@board.board[x_target][y_target].piece}"
+    puts "board old space #{@board.board[0][1].piece}"
+
+
+    #unhighlight the squares
+    puts "about to unhighlight"
+    @board.clear_highlights()
+
+    #show board again to see if its working...
+    puts "display again."
+    @board.display_board
   end
 
   def game()
