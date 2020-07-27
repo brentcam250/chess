@@ -103,9 +103,9 @@ class Chess
       puts "enter a number from 1-8 please"
       y_coord = gets.chomp.to_i
     end
-    #translate the coords to 0 based indexing
-    x_coord -= 1
-    y_coord -= 1
+    # #translate the coords to 0 based indexing
+    # x_coord -= 1
+    # y_coord -= 1
 
     if @board.board[x_coord][y_coord].piece.nil?
       puts "theres no piece there lets try this again."
@@ -236,11 +236,11 @@ class Chess
   # end
 
   def choose_move(moves, player)
-    #convert from 0 based index
-    moves.each do |move|
-      move[0] += 1
-      move[1] += 1
-    end
+    # #convert from 0 based index
+    # moves.each do |move|
+    #   move[0] += 1
+    #   move[1] += 1
+    # end
     puts "player #{player.name} please select an ending position for the piece from the following options #{moves}"
     puts "please type the x- coordinate"
     x = gets.chomp.to_i
