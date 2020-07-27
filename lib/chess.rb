@@ -93,14 +93,14 @@ class Chess
   def select_piece(player)
     puts "to enter your move, first select a piece by typing first the x-coordinate of your target piece"
     x_coord = gets.chomp.to_i
-    until (1..8).include?(x_coord)
-      puts "please enter a number from 1-8 for the x-coordinate"
+    until (0..7).include?(x_coord)
+      puts "please enter a number from 0-7 for the x-coordinate"
       x_coord = gets.chomp.to_i
     end
-    puts "now enter a number from 1-8 for the y-coordinate"
+    puts "now enter a number from 0-7 for the y-coordinate"
     y_coord = gets.chomp.to_i
-    until (1..8).include?(y_coord)
-      puts "enter a number from 1-8 please"
+    until (0..7).include?(y_coord)
+      puts "enter a number from 0-7 please"
       y_coord = gets.chomp.to_i
     end
     # #translate the coords to 0 based indexing
@@ -115,7 +115,9 @@ class Chess
       select_piece(player)
     else
       #legit piece
-      @board.board[x_coord][y_coord].background_colour = HIGHLIGHT[:INITIAL]
+      # @board.board[x_coord][y_coord].background_colour = HIGHLIGHT[:INITIAL]
+      @board.board[x_coord][y_coord].highlight = HIGHLIGHT[:INITIAL]
+
 
       piece = @board.board[x_coord][y_coord].piece
       piece.position = [x_coord, y_coord]
@@ -168,7 +170,8 @@ class Chess
       output_moves << [x,y]
       #remember this move as an available choice
       
-      @board.board[x][y].background_colour = HIGHLIGHT[:BLANK]
+      # @board.board[x][y].background_colour = HIGHLIGHT[:BLANK]
+      @board.board[x][y].highlight = HIGHLIGHT[:BLANK]
       # puts "board background = #{@board.board[x][y].background_colour}"
       direction_caller(position,direction, piece, output_moves)
     elsif(@board.board[x][y].piece.colour == piece.colour)
@@ -180,7 +183,9 @@ class Chess
     else
       #enemy piece, must highlight and stop
       puts "open fire"
-      @board.board[x][y].background_colour = HIGHLIGHT[:ENEMY]
+      # @board.board[x][y].background_colour = HIGHLIGHT[:ENEMY]
+      @board.board[x][y].highlight = HIGHLIGHT[:ENEMY]
+
       return
     end
 
@@ -201,7 +206,9 @@ class Chess
       #first must find if there are other pieces in the potential moves
       if(@board.board[x_move][y_move].piece.nil?)
         #then the square is empty
-        @board.board[x_move][y_move].background_colour = HIGHLIGHT[:BLANK]
+        # @board.board[x_move][y_move].background_colour = HIGHLIGHT[:BLANK]
+        @board.board[x_move][y_move].highlight = HIGHLIGHT[:BLANK]
+        puts "highlight == #{@board.board[x_move][y_move].highlight}"
         eligible_moves << [x_move, y_move]
       elsif piece.colour == @board.board[x_move][y_move].piece.colour
         puts "friendly fire!"
@@ -284,6 +291,9 @@ class Chess
         moves << walk_this_way(piece.position, direction, piece)
       end
     end
+
+    #redraw board with highlighting 
+    @board.display_board
 
     #now we have the eligible moves, time to get some input from player about their selection.
     selected = choose_move(moves, player)
