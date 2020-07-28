@@ -55,13 +55,13 @@ class Chess
     end
     x = 0 
     #pawns
-    8.times do |pawn|
-      #make 8 pawns all starting on y coord 6
-      pawn = Pawn.new(player)
-      # puts @board.board[x][y_pawn].class
-      @board.board[x][y_pawn].piece = pawn
-      x += 1
-    end
+    # 8.times do |pawn|
+    #   #make 8 pawns all starting on y coord 6
+    #   pawn = Pawn.new(player)
+    #   # puts @board.board[x][y_pawn].class
+    #   @board.board[x][y_pawn].piece = pawn
+    #   x += 1
+    # end
     #rooks
     rook1 = Rook.new(player)
     rook2 = Rook.new(player)
@@ -166,27 +166,31 @@ class Chess
       direction_caller(position, direction, piece, output_moves)
     elsif(@board.board[x][y].piece.nil?)
       #empty sqaure, must highlight and recurse
-      puts "empty space"
+      puts "empty space shovelling #{x}, #{y}" 
       output_moves << [x,y]
       #remember this move as an available choice
       
-      # @board.board[x][y].background_colour = HIGHLIGHT[:BLANK]
       @board.board[x][y].highlight = HIGHLIGHT[:BLANK]
-      # puts "board background = #{@board.board[x][y].background_colour}"
+      #recursive call
       direction_caller(position,direction, piece, output_moves)
     elsif(@board.board[x][y].piece.colour == piece.colour)
       #friendly piece
 
-      return output_moves
+      # output_moves.length == 0 ? (return) : (return output_moves)
+      #return output_moves
+      return
 
 
     else
       #enemy piece, must highlight and stop
       puts "open fire"
       # @board.board[x][y].background_colour = HIGHLIGHT[:ENEMY]
+      output_moves << [x,y]
+      puts "xy = #{x}, #{y}"
+      puts "enemy output = #{output_moves}"
       @board.board[x][y].highlight = HIGHLIGHT[:ENEMY]
 
-      return
+      return output_moves
     end
 
   end
@@ -227,33 +231,16 @@ class Chess
     # puts moves
   end
 
-  # def handle_knight(piece)
-  #   highlight_moves(piece)
-  # end
-
-  # def handle_pawn(piece)
-  #   # puts piece.first?
-  #   # puts "piece.firstmove = #{piece.first?}"
-  #   highlight_moves(piece)
-  # end
-
-  # def handle_king(piece)
-  #   #trick here is that king cannot move into a space that puts him in check
-  #   highlight_moves(piece)
-  # end
 
   def choose_move(moves, player)
-    # #convert from 0 based index
-    # moves.each do |move|
-    #   move[0] += 1
-    #   move[1] += 1
-    # end
+
     puts "player #{player.name} please select an ending position for the piece from the following options #{moves}"
     puts "please type the x- coordinate"
     x = gets.chomp.to_i
     puts "please type the y- coordinate"
     y = gets.chomp.to_i
-    until moves.include?([x,y])
+    #hackey fix to the output_moves not coming back "flat" enough from the recursive method walk_this_way
+    until moves.include?([x,y]) || moves[0].include?([x,y]) || moves[0][0].include?([x,y])
       puts "#{x}, #{y} is not an eligible move please try again"
       puts "please type the x- coordinate"
       x = gets.chomp.to_i
