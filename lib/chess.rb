@@ -189,8 +189,8 @@ class Chess
       puts "xy = #{x}, #{y}"
       puts "enemy output = #{output_moves}"
       @board.board[x][y].highlight = HIGHLIGHT[:ENEMY]
-
-      return output_moves
+      # return output_moves
+      return
     end
 
   end
@@ -231,8 +231,23 @@ class Chess
     # puts moves
   end
 
+  def flatten_moves(moves)
+
+  end
 
   def choose_move(moves, player)
+
+    # real_moves = []
+    # moves.each do |move|
+    #   if move == [] || move.nil?
+    #     next
+    #   else
+    #     real_moves << move 
+    #     puts " shovelling move #{move}"
+    #   end
+
+    # end
+    # puts "realmoves = #{real_moves}"
 
     puts "player #{player.name} please select an ending position for the piece from the following options #{moves}"
     puts "please type the x- coordinate"
@@ -240,7 +255,8 @@ class Chess
     puts "please type the y- coordinate"
     y = gets.chomp.to_i
     #hackey fix to the output_moves not coming back "flat" enough from the recursive method walk_this_way
-    until moves.include?([x,y]) || moves[0].include?([x,y]) || moves[0][0].include?([x,y])
+    # until moves.include?([x,y]) || moves[0].include?([x,y]) || moves[0][0].include?([x,y])
+    until moves.include?([x,y])
       puts "#{x}, #{y} is not an eligible move please try again"
       puts "please type the x- coordinate"
       x = gets.chomp.to_i
@@ -273,10 +289,14 @@ class Chess
       moves = highlight_moves(piece)
     else
       #piece that has regular moves unlimited distance.
+      moves = []
+      # puts "weird moves thing #{moves}"
       directions = piece.directions
       directions.each do |direction|
-        moves << walk_this_way(piece.position, direction, piece)
+        walk_this_way(piece.position, direction, piece, moves)
       end
+      # puts "after weird moves thing #{moves}"
+
     end
 
     #redraw board with highlighting 
