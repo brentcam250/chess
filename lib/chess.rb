@@ -55,13 +55,14 @@ class Chess
     end
     x = 0 
     #pawns
-    # 8.times do |pawn|
-    #   #make 8 pawns all starting on y coord 6
-    #   pawn = Pawn.new(player)
-    #   # puts @board.board[x][y_pawn].class
-    #   @board.board[x][y_pawn].piece = pawn
-    #   x += 1
-    # end
+    8.times do |pawn|
+      #make 8 pawns all starting on y coord 6
+      pawn = Pawn.new(player)
+      
+      # puts @board.board[x][y_pawn].class
+      @board.board[x][y_pawn].piece = pawn
+      x += 1
+    end
     #rooks
     rook1 = Rook.new(player)
     rook2 = Rook.new(player)
@@ -195,7 +196,12 @@ class Chess
 
   end
 
+  def is_check?(player)
+    #function to see if the king is in check, will be used to validate a move before it happens as well.
+    #need to check all squares around the king for pieces, then see if those pieces can move and attack king.
+    #try using highlight moves as if the king is a queen, then fill in knight moves.
 
+  end
 
 
 
@@ -231,12 +237,11 @@ class Chess
     # puts moves
   end
 
-  def flatten_moves(moves)
-
-  end
-
   def choose_move(moves, player)
-
+    if(moves.length == 0)
+      puts "no eligible moves for that piece"
+      return false
+    end
     # real_moves = []
     # moves.each do |move|
     #   if move == [] || move.nil?
@@ -304,6 +309,12 @@ class Chess
 
     #now we have the eligible moves, time to get some input from player about their selection.
     selected = choose_move(moves, player)
+    if(selected == false)
+      #selected a piece that has no eligible moves, try again.
+      @board.clear_highlights()
+      handle_turn(player)
+      return nil
+    end
     x_target = selected[0]
     y_target = selected[1]
 
