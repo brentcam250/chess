@@ -218,7 +218,7 @@ class Chess
         #then the square is empty
         # @board.board[x_move][y_move].background_colour = HIGHLIGHT[:BLANK]
         @board.board[x_move][y_move].highlight = HIGHLIGHT[:BLANK]
-        puts "highlight == #{@board.board[x_move][y_move].highlight}"
+        # puts "highlight == #{@board.board[x_move][y_move].highlight}"
         eligible_moves << [x_move, y_move]
       elsif piece.colour == @board.board[x_move][y_move].piece.colour
         puts "friendly fire!"
@@ -242,17 +242,7 @@ class Chess
       puts "no eligible moves for that piece"
       return false
     end
-    # real_moves = []
-    # moves.each do |move|
-    #   if move == [] || move.nil?
-    #     next
-    #   else
-    #     real_moves << move 
-    #     puts " shovelling move #{move}"
-    #   end
 
-    # end
-    # puts "realmoves = #{real_moves}"
 
     puts "player #{player.name} please select an ending position for the piece from the following options #{moves}"
     puts "please type the x- coordinate"
@@ -274,6 +264,42 @@ class Chess
   
   end
 
+  def pawn_neighbours(piece)
+    puts " hello im in pawn neighbours"
+    moves = []
+    starting_x = piece.position[0]
+    starting_y = piece.position[1]
+    if(piece.colour == 'black')
+      left_move = [starting_x -1, starting_y - 1]
+      right_move = [starting_x + 1, starting_y - 1]
+    else
+      left_move = [starting_x - 1, starting_y + 1]
+      right_move = [starting_x + 1, starting_y + 1]
+    end
+    #no killable neighbours
+    if(@board.board[left_move[0]][left_move[1]].piece.nil? && @board.board[right_move[0]][right_move[1]].piece.nil?)
+      return nil
+    else
+      unless (@board.board[left_move[0]][left_move[1]].piece.nil?)
+        if(@board.board[left_move[0]][left_move[1]].piece.colour != piece.colour)
+          moves = left_move
+          @board.board[left_move[0]][left_move[1]].highlight = HIGHLIGHT[:ENEMY]
+        end
+      end
+      unless (@board.board[right_move[0]][right_move[1]].piece.nil?)
+        if(@board.board[right_move[0]][right_move[1]].piece.colour != piece.colour)
+          if(moves.length > 0)
+            moves << right_move
+          else
+            moves = right_move
+          end
+          @board.board[right_move[0]][right_move[1]].highlight = HIGHLIGHT[:ENEMY]
+        end
+      end
+    end
+    return moves
+  end
+
   def handle_turn(player)
     #this function handles a players turn instead of passing from one function to the next, it collects return values and calls the appropriate func
     piece = select_piece(player)
@@ -287,11 +313,19 @@ class Chess
     when "pawn"
       puts "do pawn"
       # handle_pawn(piece)
+      kill = pawn_neighbours(piece)
+
       moves = highlight_moves(piece)
+      #find if killable neighbours
+      if kill
+        puts " KILL!!"
+        moves << kill
+      end
     when "king"
       puts "do king"
       # handle_king(piece)
       moves = highlight_moves(piece)
+
     else
       #piece that has regular moves unlimited distance.
       moves = []
