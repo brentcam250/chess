@@ -15,9 +15,6 @@ class Pawn < Piece
     
   end
 
-  def first? ()
-    @first
-  end
 
   def pawn_moves()
     if @first == true

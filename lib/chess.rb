@@ -198,9 +198,47 @@ class Chess
 
   def is_check?(player)
     #function to see if the king is in check, will be used to validate a move before it happens as well.
-    #need to check all squares around the king for pieces, then see if those pieces can move and attack king.
-    #try using highlight moves as if the king is a queen, then fill in knight moves.
+    #simply brute forces all pieces on the board to check if they can hit the king
 
+    check = false
+
+    for x in 0..7
+      for y in 0..7 
+        unless @board.board[x][y].piece.nil?
+          if(piece = @board.board[x][y].piece == "pawn" || piece == "knight" || piece == "king")
+            moves = @board.board[x][y].piece.find_moves
+            moves.each do |move|
+              x_move = move[0]
+              y_move = move[1]
+              if (@board.board[x_move][y_move].piece == 'king' && player.colour != piece.colour)
+                puts "CHECK!!!"
+                check = true
+                return check
+              end
+            end
+          else
+            #one of the repeated move pieces
+            moves = []
+            # puts "weird moves thing #{moves}"
+            directions = piece.directions
+            directions.each do |direction|
+              walk_this_way(piece.position, direction, piece, moves)
+            end
+            moves.each do |move|
+              x_move = move[0]
+              y_move = move[1]
+              if (@board.board[x_move][y_move].piece == 'king' && player.colour != piece.colour)
+                puts "CHECK!!!"
+                check = true
+                return check
+              end
+            end
+          end
+          
+        end
+      end
+    end
+      return check
   end
 
 
@@ -289,7 +327,7 @@ class Chess
       unless (@board.board[right_move[0]][right_move[1]].piece.nil?)
         if(@board.board[right_move[0]][right_move[1]].piece.colour != piece.colour)
           if(moves.length > 0)
-            moves << right_move
+            moves.append(right_move)
           else
             moves = right_move
           end
@@ -319,7 +357,7 @@ class Chess
       #find if killable neighbours
       if kill
         puts " KILL!!"
-        moves << kill
+        moves.append(kill)
       end
     when "king"
       puts "do king"
